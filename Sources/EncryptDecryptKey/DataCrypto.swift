@@ -10,7 +10,7 @@ import Foundation
 import CryptoKit
 
 @available(iOS 13.0, *)
-extension Data {
+public extension Data {
     /// Using the shared key defined earlier
     func encrypt() throws -> Data {
         try AES.GCM.seal(self, using: .theKey()).combined!
