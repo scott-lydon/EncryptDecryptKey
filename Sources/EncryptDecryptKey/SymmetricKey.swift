@@ -6,10 +6,13 @@
 //  Copyright © 2024 ElevatedUnderdogs. All rights reserved.
 //
 
+#if canImport(CryptoKit)
+// Your CryptoKit code here
 import Foundation
 import CryptoKit
 
 public var theNonce: [UInt8] = []
+
 
 @available(iOS 13.0, *)
 public extension SymmetricKey {
@@ -18,3 +21,5 @@ public extension SymmetricKey {
         SymmetricKey(data: Data(nonce))
     }
 }
+
+#endif
