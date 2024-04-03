@@ -14,7 +14,7 @@ import CryptoKit
 public var theNonce: [UInt8] = []
 
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, macOS 10.15, *)
 public extension SymmetricKey {
     /// This should match the server's key for encryption/decryption to work
     static func theKey(nonce: [UInt8] = theNonce) -> SymmetricKey {
