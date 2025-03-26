@@ -1,23 +1,36 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 5.09
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
+// swift-tools-version:5.7
 import PackageDescription
 
 let package = Package(
     name: "EncryptDecryptKey",
+    platforms: [
+        .macOS(.v12),
+        .iOS(.v15)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "EncryptDecryptKey",
-            targets: ["EncryptDecryptKey"]),
+            targets: ["EncryptDecryptKey"]
+        ),
+    ],
+    dependencies: [
+        // ✅ Added swift-crypto
+        .package(url: "https://github.com/apple/swift-crypto.git", .upToNextMajor(from: "3.12.2"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "EncryptDecryptKey"),
+            name: "EncryptDecryptKey",
+            dependencies: [
+                // ✅ Link Crypto to the target
+                .product(name: "Crypto", package: "swift-crypto")
+            ]
+        ),
         .testTarget(
             name: "EncryptDecryptKeyTests",
-            dependencies: ["EncryptDecryptKey"]),
+            dependencies: ["EncryptDecryptKey"]
+        ),
     ]
 )
