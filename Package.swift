@@ -7,8 +7,8 @@ import PackageDescription
 let package = Package(
     name: "EncryptDecryptKey",
     platforms: [
-        .macOS(.v12),
-        .iOS(.v15)
+        .macOS(.v10_15),
+        .iOS(.v13)
     ],
     products: [
         .library(
