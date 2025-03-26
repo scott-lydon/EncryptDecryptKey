@@ -31,12 +31,34 @@ public extension StringProtocol {
 
     // MARK: - StringProtocol Encryption Extensions
 
-    func sealed(using key: SymmetricKey, nonce: AES.GCM.Nonce? = nil) throws -> AES.GCM.SealedBox {
-        try AES.GCM.seal(data, using: key, nonce: nonce)
+    /// Encrypts the data using AES-GCM with the provided symmetric key and an optional nonce.
+    /// - Parameters:
+    ///   - key: The symmetric key used for encryption and decryption. Must be a secure, random value (e.g., 128 or 256 bits).
+    ///   - nonce: An optional nonce (number used once) for AES-GCM. If `nil` (default), a random nonce is generated
+    ///   automatically, ensuring uniqueness per encryption. If provided, it must be unique for each encryption with the same key
+    ///   to maintain security; nonce reuse compromises confidentiality and authenticity.
+    /// - Returns: An `AES.GCM.SealedBox` containing the encrypted data, authentication tag, and nonce (combined format).
+    /// - Throws: An error if encryption fails (e.g., invalid key or nonce).
+    /// - Note: The key does not embed the nonce; they are independent inputs. Use `nil` for nonce in most cases unless
+    /// explicit nonce control is required (e.g., deterministic encryption or protocol-specific nonce derivation).
+    func sealed(using key: SymmetricKey? = nil, nonce: AES.GCM.Nonce? = nil) throws -> AES.GCM.SealedBox {
+        var buffer: SymmetricKey
+        if let key {
+            buffer = key
+        } else {
+            buffer = try .theKey()
+        }
+        return try AES.GCM.seal(data, using: buffer, nonce: nonce)
     }
 
-    func encrypted(using key: SymmetricKey) throws -> Data {
-        guard let combined = try sealed(using: key).combined else {
+    func encrypted(using key: SymmetricKey? = nil) throws -> Data {
+        var buffer: SymmetricKey
+        if let key {
+            buffer = key
+        } else {
+            buffer = try .theKey()
+        }
+        guard let combined = try sealed(using: buffer).combined else {
             // near impossible case to reach, the nonce is validated by the sealed box
             throw EncryptionError.combinedDataUnavailable
         }

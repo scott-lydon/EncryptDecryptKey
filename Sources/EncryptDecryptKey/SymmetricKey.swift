@@ -7,12 +7,11 @@
 //
 
 import Foundation
-import CryptoKit
+import Crypto
 
-@available(iOS 13.0, macOS 10.15, *)
 public extension SymmetricKey {
     /// Returns a SymmetricKey or throws a specific error if the nonce is invalid
-    static public func theKey(nonce: [UInt8] = theNonce) throws -> SymmetricKey {
+    static func theKey(nonce: [UInt8] = theNonce) throws -> SymmetricKey {
         let minLength = 16   // Recommended minimum for AES-GCM (128 bits)
         let maxLength = 64   // Arbitrary upper bound for sanity check
 
